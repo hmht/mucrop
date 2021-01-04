@@ -299,16 +299,20 @@ int main(int argc, const char *argv[])
 	struct mucrop_core core = {};
 	xcb_generic_event_t *ev;
 	const char *src_filename = argv[1];
-	const char *dst_filename = argv[2];
+	const char *dst_filename;
 	struct timespec tp;
 	int ret = 0;
 
-	if (argc != 2 && argc != 3) {
-		usage(true);
-		return EX_USAGE;
-	}
-	if (argc == 2) {
-		dst_filename = src_filename;
+	switch (argc) {
+		case 2:
+			dst_filename = src_filename;
+			break;
+		case 3:
+			dst_filename = argv[2];
+			break;
+		default:
+			usage(true);
+			return EX_USAGE;
 	}
 
 	MagickWandGenesis();
